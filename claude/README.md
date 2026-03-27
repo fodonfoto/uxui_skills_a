@@ -1,40 +1,30 @@
-# Claude Code Bundle
+# Claude Skill Pack
 
-This folder contains Claude Code-compatible subagents for the same workflows as the Codex bundle.
+This folder contains Claude Code skill source files.
 
-## What Is Included
+## Single Entry Point
 
-- `.claude/agents/prd-brief.md`
-- `.claude/agents/professor-ux.md`
-- `.claude/agents/stitch.md`
-- `.claude/agents/stitch-loop.md`
-- `.claude/agents/design-md.md`
+Use `skill creator` as the standardized entry point for creating or updating the other skills in this bundle.
 
-## What Is Not Included
+## Included Skills
 
-- automations
-- Codex-specific bundle files
-- local-only machine configuration
+- `skill-creator`
+- `prd-brief`
+- `professor-ux`
+- `stitch`
+- `stitch-loop`
+- `design-md`
 
-## Install
+## How To Use
 
-Claude Code reads project-level subagents from `.claude/agents/` and project settings from `.claude/settings.json`.
-
-To use this bundle in a Claude Code project:
-
-1. Copy the `claude/.claude/` folder into the root of your Claude Code project.
-2. Keep the agent files as Markdown with YAML frontmatter.
-3. Add project settings in `.claude/settings.json` if you need permissions or additional configuration.
-4. Use the subagents by name inside Claude Code when a task matches their expertise.
-
-## Create New Subagent
-
-Claude Code's practical creation flow is the `/agents` command. In this bundle, you should use the dedicated `skill-creator` subagent as the single entry point for creating or updating the other Claude bundle agents.
-
-See [AGENT_CREATION_GUIDE.md](./AGENT_CREATION_GUIDE.md) for copy-paste prompts and the expected creation workflow.
+1. Open a Claude Code project.
+2. Use the `skill creator` workflow.
+3. Point it at one of the source files in `claude/skills/`.
+4. Save the resulting skill file in your target project.
 
 ## Notes
 
-- Each agent file is written to be project-level and portable.
-- `stitch`, `stitch-loop`, and `design-md` expect Stitch access in the target project.
-- `professor-ux` expects Figma access when live canvas review is needed.
+- This bundle intentionally contains skills only.
+- It does not contain automations.
+- It does not use the `agents` folder layout.
+- If you need project-specific settings or permissions, add them in the target project's own configuration files.
