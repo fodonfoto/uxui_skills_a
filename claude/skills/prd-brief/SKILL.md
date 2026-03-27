@@ -1,6 +1,8 @@
 ---
 name: prd-brief
 description: Turn raw requirements, discovery notes, or transcripts into PRD.md and BRIEF.md with careful ambiguity handling.
+metadata:
+  short-description: Convert raw requirements into PRD and brief docs
 ---
 
 # PRD + BRIEF
