@@ -29,9 +29,9 @@ To use this bundle in a Claude Code project:
 
 ## Create New Subagent
 
-Claude Code's practical creation flow is the `/agents` command. Use it when you want Claude to create a new subagent from one of the Markdown files in this bundle.
+Claude Code's practical creation flow is the `/agents` command. In this bundle, you should use the dedicated `skill-creator` subagent as the single entry point for creating or updating the other Claude bundle agents.
 
-See [AGENT_CREATION_GUIDE.md](./AGENT_CREATION_GUIDE.md) for copy-paste prompts.
+See [AGENT_CREATION_GUIDE.md](./AGENT_CREATION_GUIDE.md) for copy-paste prompts and the expected creation workflow.
 
 ## Notes
 
