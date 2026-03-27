@@ -92,29 +92,41 @@ Explain how the UI handles layers. Describe the presence and quality of shadows 
 - **Precision:** Include exact hex codes for colors while using descriptive names
 - **Context:** Explain the "why" behind design decisions, not just the "what"
 
-## Output Format (DESIGN.md Structure)
+## Default `DESIGN.md` Output Shape
+
+Unless the user provides a stricter template, generate `DESIGN.md` using this exact structure:
 
 ```markdown
-# Design System: [Project Title]
-**Project ID:** [Insert Project ID Here]
+# Design System
 
-## 1. Visual Theme & Atmosphere
-(Description of the mood, density, and aesthetic philosophy.)
+## Overview
+A focused, minimal dark interface for a developer productivity tool.
+Clean lines, low visual noise, high information density.
 
-## 2. Color Palette & Roles
-(List colors by Descriptive Name + Hex Code + Functional Role.)
+## Colors
+- **Primary** (#2665fd): CTAs, active states, key interactive elements
+- **Secondary** (#475569): Supporting UI, chips, secondary actions
+- **Surface** (#0b1326): Page backgrounds
+- **On-surface** (#dae2fd): Primary text on dark backgrounds
+- **Error** (#ffb4ab): Validation errors, destructive actions
 
-## 3. Typography Rules
-(Description of font family, weight usage for headers vs. body, and letter-spacing character.)
+## Typography
+- **Headlines**: Inter, semi-bold
+- **Body**: Inter, regular, 14–16px
+- **Labels**: Inter, medium, 12px, uppercase for section headers
 
-## 4. Component Stylings
-* **Buttons:** (Shape description, color assignment, behavior).
-* **Cards/Containers:** (Corner roundness description, background color, shadow depth).
-* **Inputs/Forms:** (Stroke style, background).
+## Components
+- **Buttons**: Rounded (8px), primary uses brand blue fill
+- **Inputs**: 1px border, subtle surface-variant background
+- **Cards**: No elevation, relies on border and background contrast
 
-## 5. Layout Principles
-(Description of whitespace strategy, margins, and grid alignment.)
+## Do's and Don'ts
+- Do use the primary color sparingly, only for the most important action
+- Don't mix rounded and sharp corners in the same view
+- Do maintain 4:1 contrast ratio for all text
 ```
+
+If the user provides a project-specific template, follow that template exactly and keep the content concise, semantically descriptive, and grounded in the Stitch source assets.
 
 ## Usage Example
 
