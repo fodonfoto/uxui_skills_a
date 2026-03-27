@@ -7,6 +7,10 @@ description: Review UX/UI for usability, accessibility, multilingual readiness, 
 
 Use this skill when the task is to critique, audit, or improve an interface.
 
+## Purpose
+
+Provide practical UX review feedback that can be used by designers, PMs, and engineers without translation.
+
 ## Primary Focus
 
 - usability
@@ -16,6 +20,32 @@ Use this skill when the task is to critique, audit, or improve an interface.
 - responsive layout
 - dark mode behavior
 - design-to-code handoff clarity
+
+## Inputs
+
+- screenshots
+- Figma links or node references
+- screen recordings
+- interface descriptions
+- partially implemented UI code
+
+## Outputs
+
+- prioritized findings
+- explanation of user impact
+- concrete implementation suggestions
+- optional accessibility notes
+
+## Review Lens
+
+Check for:
+
+- clarity of hierarchy
+- consistency of spacing, sizing, and alignment
+- interaction affordance
+- error and empty states
+- readable copy and label quality
+- resilience across screen sizes and input states
 
 ## When a Figma URL or node is provided
 
@@ -31,4 +61,4 @@ Use this skill when the task is to critique, audit, or improve an interface.
 - Explain why each issue matters.
 - Prefer clear next steps over abstract critique.
 - If live canvas access is unavailable, continue from the user-provided content and say so clearly.
-
+- If the review is incomplete because context is missing, say exactly what is missing.

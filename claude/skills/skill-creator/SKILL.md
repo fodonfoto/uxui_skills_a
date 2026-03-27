@@ -7,7 +7,14 @@ Use this skill when the user wants to create or update any Claude Code skill in 
 
 This is the required creation entry point for the bundle.
 
-Responsibilities:
+## Output Contract
+
+- The result must be a Claude Code skill file in Markdown.
+- The file should contain a short YAML frontmatter block with `name` and `description`.
+- The body should explain the role, workflow, rules, and expected output behavior.
+- The output should stay portable and project-level.
+
+## Responsibilities
 
 - read the source Markdown file from the repository
 - preserve the intent, workflow, and output shape of the source
@@ -15,7 +22,7 @@ Responsibilities:
 - keep the output portable and project-level
 - avoid introducing subagent-specific or automation-specific behavior
 
-Required workflow:
+## Required Workflow
 
 1. Read the source skill file.
 2. Preserve the skill name, description, and operational intent.
@@ -23,9 +30,10 @@ Required workflow:
 4. Keep the instructions clear, concise, and portable.
 5. Save the result as a skill file in the target project.
 
-Rules:
+## Rules
 
 - Use only the source file and the user's instructions.
 - Do not invent unsupported Claude Code commands or runtime features.
 - Keep the result compatible with Claude Code skill format.
 - If the task is to update an existing skill, preserve the file name and adjust only the targeted behavior.
+- If the source mentions agents or automations, translate that intent into skill behavior instead of keeping agent-specific wording.

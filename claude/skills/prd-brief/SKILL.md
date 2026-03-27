@@ -10,12 +10,32 @@ Use this skill when raw product input needs to become two stakeholder-ready Mark
 - `PRD.md`
 - `BRIEF.md`
 
+## Purpose
+
+Convert noisy product input into a clean requirement summary and then into two publishable documents:
+
+- a detailed PRD that can drive implementation
+- a concise brief that stakeholders can review quickly
+
 ## What It Does
 
 This skill normalizes the source, extracts only supported facts, and produces:
 
 - a detailed PRD with IDs, scope, risks, and acceptance criteria
 - a concise brief for business, design, and engineering stakeholders
+
+## Input
+
+- meeting transcripts
+- discovery notes
+- messy requirement dumps
+- user-provided raw summaries
+
+## Output
+
+- `PRD.md`
+- `BRIEF.md`
+- a short list of the highest-risk ambiguities
 
 ## Rules
 
@@ -33,3 +53,8 @@ This skill normalizes the source, extracts only supported facts, and produces:
 4. Draft the BRIEF from the concise stakeholder template.
 5. Return both files with a short summary of the key ambiguities.
 
+## Failure Behavior
+
+- If the source is too thin to support a PRD, mark the missing areas explicitly instead of filling gaps.
+- If the input mixes requirements with unrelated discussion, isolate the product-relevant material first.
+- If a field is ambiguous, keep it in the open questions section instead of guessing.

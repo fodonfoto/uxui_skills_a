@@ -1,14 +1,15 @@
 # Claude Skill Creation Guide
 
-This repository uses `skill-creator` as the single standardized entry point for creating or updating Claude Code skills.
+This repository uses `skill creator` as the single standardized entry point for creating or updating Claude Code skills.
 
 Use the source Markdown files in `claude/skills/` as the canonical inputs.
 When working inside a cloned repo, prefer relative file paths over GitHub URLs.
+If you want a project-level note for Claude Code, copy `claude/CLAUDE.md.example` into the target project as `CLAUDE.md`.
 
 ## Recommended Creation Flow
 
 1. Open your Claude Code project.
-2. Invoke the `skill-creator` skill.
+2. Invoke the `skill creator` workflow.
 3. Point it at one of the source files in `claude/skills/`.
 4. Ask it to preserve the intent, workflow, and output format.
 5. Save the result as a skill file in your target Claude Code project.
@@ -18,7 +19,7 @@ When working inside a cloned repo, prefer relative file paths over GitHub URLs.
 ### prd-brief
 
 ```text
-Use the skill-creator workflow to create or update a Claude Code skill from this source file:
+Use the skill creator workflow to create or update a Claude Code skill from this source file:
 claude/skills/prd-brief/SKILL.md
 
 Keep the result compatible with Claude Code skill format and preserve the PRD and BRIEF generation workflow.
@@ -27,7 +28,7 @@ Keep the result compatible with Claude Code skill format and preserve the PRD an
 ### professor-ux
 
 ```text
-Use the skill-creator workflow to create or update a Claude Code skill from this source file:
+Use the skill creator workflow to create or update a Claude Code skill from this source file:
 claude/skills/professor-ux/SKILL.md
 
 Keep the result compatible with Claude Code skill format and preserve the UX review workflow.
@@ -36,7 +37,7 @@ Keep the result compatible with Claude Code skill format and preserve the UX rev
 ### stitch
 
 ```text
-Use the skill-creator workflow to create or update a Claude Code skill from this source file:
+Use the skill creator workflow to create or update a Claude Code skill from this source file:
 claude/skills/stitch/SKILL.md
 
 Keep the result compatible with Claude Code skill format and preserve the Stitch workflow.
@@ -45,7 +46,7 @@ Keep the result compatible with Claude Code skill format and preserve the Stitch
 ### stitch-loop
 
 ```text
-Use the skill-creator workflow to create or update a Claude Code skill from this source file:
+Use the skill creator workflow to create or update a Claude Code skill from this source file:
 claude/skills/stitch-loop/SKILL.md
 
 Keep the result compatible with Claude Code skill format and preserve the iterative build loop.
@@ -54,7 +55,7 @@ Keep the result compatible with Claude Code skill format and preserve the iterat
 ### design-md
 
 ```text
-Use the skill-creator workflow to create or update a Claude Code skill from this source file:
+Use the skill creator workflow to create or update a Claude Code skill from this source file:
 claude/skills/design-md/SKILL.md
 
 Keep the result compatible with Claude Code skill format and preserve the design-system synthesis workflow.

@@ -1,0 +1,26 @@
+# Claude Project Setup Example
+
+This file is a project-level example for using the Claude skill pack in a Claude Code workspace.
+
+## Recommended Setup
+
+1. Copy the skill source files from `claude/skills/` into your target Claude Code project.
+2. Keep the generated skill files in a location your Claude Code setup already reads.
+3. Add any project-specific notes, permissions, or context to `CLAUDE.md`.
+4. Use `skill creator` when you need to create or update one of the skills from this bundle.
+
+## Suggested Project Notes
+
+- `skill creator` is the only standardized entry point for generating or updating skills from this bundle.
+- Do not convert these skills into agents or automations.
+- Keep the target project's configuration local to that project.
+
+## Optional Context
+
+If the target project needs extra setup, document it here:
+
+- required APIs
+- local file paths
+- design-system context
+- tool or permission expectations
+
