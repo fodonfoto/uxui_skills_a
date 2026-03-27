@@ -1,27 +1,19 @@
 # Claude Skill Pack
 
-This folder contains Claude Code skill source files that are meant to be copied into a target Claude Code project and recreated there with `skill creator`.
+This bundle mirrors the Codex skill workflows in a Claude Code-friendly skill format.
+
+## What You Get
+
+- `skill-creator` for generating or updating skills from repository source files
+- `prd-brief` for turning raw requirements into `PRD.md` and `BRIEF.md`
+- `professor-ux` for UX/UI review, audit, and TCEBC prompt synthesis
+- `stitch` for Stitch project workflows and `DESIGN.md`-first generation
+- `stitch-loop` for iterative page-by-page baton loops
+- `design-md` for synthesizing semantic `DESIGN.md` files from Stitch assets
 
 ## Single Entry Point
 
 Use `skill creator` as the standardized entry point for creating or updating the other skills in this bundle.
-
-## Included Skills
-
-- `skill-creator`
-- `prd-brief`
-- `professor-ux`
-- `stitch`
-- `stitch-loop`
-- `design-md`
-
-## What This Bundle Is For
-
-- turn raw requirements into PRD and BRIEF artifacts
-- review UX/UI and design-to-code handoff quality
-- support Stitch-oriented design workflows
-- synthesize semantic `DESIGN.md` files from visual context
-- provide a portable, skill-only bundle for Claude Code
 
 ## Install Into Claude Code
 

@@ -58,7 +58,7 @@ Assume the following product realities unless the official docs contradict them:
 
 ## Stitch MCP Execution Contract
 
-In this Codex environment, use the available Stitch MCP tools to drive the required project workflow even when there is no dedicated single-purpose import tool.
+In this environment, use the available Stitch MCP tools to drive the required project workflow even when there is no dedicated single-purpose import tool.
 
 Required rule:
 
@@ -117,7 +117,7 @@ Activate this skill when the user wants to:
 
 ## Available Stitch Tools In This Environment
 
-Prefer the actual Stitch MCP tools exposed in this Codex environment:
+Prefer the actual Stitch MCP tools exposed in this environment:
 
 - `mcp__stitch__list_projects`
 - `mcp__stitch__create_project`
