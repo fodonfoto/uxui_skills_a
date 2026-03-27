@@ -100,30 +100,37 @@ Unless the user provides a stricter template, generate `DESIGN.md` using this ex
 # Design System
 
 ## Overview
-A focused, minimal dark interface for a developer productivity tool.
-Clean lines, low visual noise, high information density.
+A calm, professional interface for a healthcare scheduling platform.
+Accessibility-first design with high contrast and generous touch targets.
 
 ## Colors
 - **Primary** (#2665fd): CTAs, active states, key interactive elements
-- **Secondary** (#475569): Supporting UI, chips, secondary actions
-- **Surface** (#0b1326): Page backgrounds
-- **On-surface** (#dae2fd): Primary text on dark backgrounds
-- **Error** (#ffb4ab): Validation errors, destructive actions
+- **Secondary** (#6074b9): Supporting actions, chips, toggle states
+- **Tertiary** (#bd3800): Accent highlights, badges, decorative elements
+- **Neutral** (#757681): Backgrounds, surfaces, non-chromatic UI
 
 ## Typography
-- **Headlines**: Inter, semi-bold
-- **Body**: Inter, regular, 14–16px
-- **Labels**: Inter, medium, 12px, uppercase for section headers
+- **Headline Font**: Inter
+- **Body Font**: Inter
+- **Label Font**: Inter
+
+Headlines use semi-bold weight. Body text uses regular weight at 14–16px.
+Labels use medium weight at 12px with uppercase for section headers.
+
+## Elevation
+This design uses no shadows. Depth is conveyed through border contrast
+and surface color variation (surface, surface-container, surface-bright).
 
 ## Components
-- **Buttons**: Rounded (8px), primary uses brand blue fill
-- **Inputs**: 1px border, subtle surface-variant background
-- **Cards**: No elevation, relies on border and background contrast
+- **Buttons**: Rounded (8px), primary uses brand blue fill, secondary uses outline
+- **Inputs**: 1px border, surface-variant background, 12px padding
+- **Cards**: No elevation, 1px outline border, 12px corner radius
 
 ## Do's and Don'ts
-- Do use the primary color sparingly, only for the most important action
+- Do use the primary color only for the single most important action per screen
 - Don't mix rounded and sharp corners in the same view
-- Do maintain 4:1 contrast ratio for all text
+- Do maintain WCAG AA contrast ratios (4.5:1 for normal text)
+- Don't use more than two font weights on a single screen
 ```
 
 If the user provides a project-specific template, follow that template exactly and keep the content concise, semantically descriptive, and grounded in the Stitch source assets.
