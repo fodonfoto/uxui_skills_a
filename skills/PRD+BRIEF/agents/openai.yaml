@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD+BRIEF"
+  short_description: "Convert raw requirements into PRD and brief docs"
+  default_prompt: "Turn the provided raw requirements into a detailed PRD.md and a concise BRIEF.md. Keep the source faithful, surface ambiguities explicitly, and avoid inventing scope."
