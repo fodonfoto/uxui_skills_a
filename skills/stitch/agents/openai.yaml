@@ -1,4 +1,0 @@
-interface:
-  display_name: "Stitch"
-  short_description: "Stitch-style UI generation and iteration"
-  default_prompt: "Use $stitch to iterate on this UI task from idea to implementation-ready output."

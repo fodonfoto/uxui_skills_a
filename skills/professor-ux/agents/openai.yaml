@@ -1,4 +1,0 @@
-interface:
-  display_name: "Professor UX"
-  short_description: "วิเคราะห์ UX/UI ตามมาตรฐานสากลและแนะนำ AI workflow แบบลงมือทำได้"
-  default_prompt: "วิเคราะห์ UX/UI นี้ตามมาตรฐาน WCAG 2.2, ISO 9241-11 และ Nielsen’s heuristics แล้วสรุปปัญหาหลัก, เชื่อมโยงมาตรฐาน, เสนอ AI-powered recommendations และ implementation steps ที่นำไปใช้ได้จริง"
