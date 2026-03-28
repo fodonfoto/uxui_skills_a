@@ -92,6 +92,18 @@ Explain how the UI handles layers. Describe the presence and quality of shadows 
 - **Precision:** Include exact hex codes for colors while using descriptive names
 - **Context:** Explain the "why" behind design decisions, not just the "what"
 
+## Template Precedence
+
+Use the example at `examples/DESIGN.md` as the default template for generated output.
+
+Template priority:
+1. If the user provides a project-specific `DESIGN.md` template, follow it exactly.
+2. If the user provides a custom example like the one in the conversation, mirror its section order, tone, and structure.
+3. If no custom template is provided, use `examples/DESIGN.md` as the baseline.
+4. Only fall back to the generic default `DESIGN.md` shape when no example or template is available.
+
+When a template is provided, keep the content concise, semantically descriptive, and grounded in the Stitch source assets. Do not replace the template with a generic design-system narrative unless the user explicitly asks for that.
+
 ## Default `DESIGN.md` Output Shape
 
 Unless the user provides a stricter template, generate `DESIGN.md` using this exact structure:
