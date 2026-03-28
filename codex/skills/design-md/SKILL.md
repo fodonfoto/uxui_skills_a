@@ -1,6 +1,6 @@
 ---
 name: design-md
-description: Analyze Stitch projects and synthesize a semantic design system into DESIGN.md files
+description: Synthesize a semantic design system into DESIGN.md files from PRDs, briefs, or Stitch project assets
 allowed-tools:
   - "stitch*:*"
   - "Read"
@@ -8,27 +8,37 @@ allowed-tools:
   - "web_fetch"
 ---
 
-# Stitch DESIGN.md Skill
+# DESIGN.md Skill
 
-You are an expert Design Systems Lead. Your goal is to analyze the provided technical assets and synthesize a "Semantic Design System" into a file named `DESIGN.md`.
+You are an expert Design Systems Lead. Your goal is to analyze the provided source material and synthesize a "Semantic Design System" into a file named `DESIGN.md`.
 
 ## Overview
 
-This skill helps you create `DESIGN.md` files that serve as the "source of truth" for prompting Stitch to generate new screens that align perfectly with existing design language. Stitch interprets design through "Visual Descriptions" supported by specific color values.
+This skill helps you create `DESIGN.md` files that serve as the "source of truth" for prompting design tools to generate new screens that align with an existing design language. When Stitch assets are available, they can be used to calibrate the system through visual descriptions and specific color values. When they are not available, the file should still be generated from PRDs, briefs, product notes, or other requirement documents.
 
 ## Prerequisites
 
-- Access to the Stitch MCP Server
-- A Stitch project with at least one designed screen
+- A PRD, brief, or other product requirement source is sufficient
+- If available, Stitch project assets can be used as supporting reference material
 - Access to the Stitch Effective Prompting Guide: https://stitch.withgoogle.com/docs/learn/prompting/
 
 ## The Goal
 
-The `DESIGN.md` file will serve as the "source of truth" for prompting Stitch to generate new screens that align perfectly with the existing design language. Stitch interprets design through "Visual Descriptions" supported by specific color values.
+The `DESIGN.md` file will serve as the "source of truth" for prompting generation tools to create new screens that align with the desired design language. Stitch assets, when present, help ground the system in visual evidence; otherwise, the file should be inferred from product intent, UX requirements, and narrative direction in the PRD or brief.
+
+## Source Strategy
+
+Use the strongest available source first:
+
+1. **PRD / Brief**: Primary source for product intent, audience, tone, constraints, and hierarchy
+2. **Supporting references**: Existing docs, brand notes, copy guidelines, or screenshots
+3. **Stitch assets**: Use when available to validate and refine the visual system
+
+Do not block generation on the absence of Stitch data. If a PRD or brief is available, synthesize the design language from that material and use any visual references only to sharpen the output.
 
 ## Retrieval and Networking
 
-To analyze a Stitch project, you must retrieve screen metadata and design assets using the Stitch MCP Server tools:
+To analyze a Stitch project when one is available, retrieve screen metadata and design assets using the Stitch MCP Server tools. If you are working only from a PRD or brief, skip this section and derive the system directly from the provided source material.
 
 1. **Namespace discovery**: Run `list_tools` to find the Stitch MCP prefix. Use this prefix (e.g., `mcp_stitch:`) for all subsequent calls.
 
@@ -42,7 +52,7 @@ To analyze a Stitch project, you must retrieve screen metadata and design assets
    - Review screen titles to identify the target screen (e.g., "Home", "Landing Page")
    - Extract the Screen ID from the screen's `name` field
 
-4. **Metadata fetch**: 
+4. **Metadata fetch**:
    - Call `[prefix]:get_screen` with both `projectId` and `screenId` (both as numeric IDs only)
    - This returns the complete screen object including:
      - `screenshot.downloadUrl` - Visual reference of the design
@@ -63,15 +73,21 @@ To analyze a Stitch project, you must retrieve screen metadata and design assets
 
 ## Analysis & Synthesis Instructions
 
-### 1. Extract Project Identity (JSON)
-- Locate the Project Title
-- Locate the specific Project ID (e.g., from the `name` field in the JSON)
+### 1. Extract Project Identity
+- If working from Stitch, locate the Project Title and specific Project ID
+- If working from a PRD or brief, locate the product name, initiative name, or feature title
+- Preserve the project identity exactly as it appears in the source material unless a normalized label is clearly needed
 
-### 2. Define the Atmosphere (Image/HTML)
-Evaluate the screenshot and HTML structure to capture the overall "vibe." Use evocative adjectives to describe the mood (e.g., "Airy," "Dense," "Minimalist," "Utilitarian").
+### 2. Define the Atmosphere
+Evaluate the strongest available evidence, in this order:
+- PRD / brief language and positioning
+- Brand notes, copy tone, and user experience goals
+- Screenshots, HTML, or other visual references when available
+
+Use evocative adjectives to describe the mood (e.g., "Airy," "Dense," "Minimalist," "Utilitarian").
 
 ### 3. Map the Color Palette (Tailwind Config/JSON)
-Identify the key colors in the system. For each color, provide:
+Identify the key colors in the system from whichever source is available. For each color, provide:
 - A descriptive, natural language name that conveys its character (e.g., "Deep Muted Teal-Navy")
 - The specific hex code in parentheses for precision (e.g., "#294056")
 - Its specific functional role (e.g., "Used for primary actions")
@@ -85,12 +101,18 @@ Convert technical `border-radius` and layout values into physical descriptions:
 ### 5. Describe Depth & Elevation
 Explain how the UI handles layers. Describe the presence and quality of shadows (e.g., "Flat," "Whisper-soft diffused shadows," or "Heavy, high-contrast drop shadows").
 
+### 6. Infer Missing Details Carefully
+- If a source does not specify a detail, infer the most likely design choice from the surrounding context
+- Mark assumptions through phrasing rather than technical certainty when needed
+- Do not invent brand rules that conflict with the source material
+
 ## Output Guidelines
 
 - **Language:** Use descriptive design terminology and natural language exclusively
 - **Format:** Generate a clean Markdown file following the structure below
 - **Precision:** Include exact hex codes for colors while using descriptive names
 - **Context:** Explain the "why" behind design decisions, not just the "what"
+- **Source Flexibility:** Use PRD or brief language as the primary basis when Stitch assets are not available
 
 ## Template Precedence
 
@@ -100,9 +122,9 @@ Template priority:
 1. If the user provides a project-specific `DESIGN.md` template, follow it exactly.
 2. If the user provides a custom example like the one in the conversation, mirror its section order, tone, and structure.
 3. If no custom template is provided, use `examples/DESIGN.md` as the baseline.
-4. Only fall back to the generic default `DESIGN.md` shape when no example or template is available.
+4. If neither Stitch nor a user-provided example is available, synthesize a practical `DESIGN.md` directly from the PRD or brief using the default shape.
 
-When a template is provided, keep the content concise, semantically descriptive, and grounded in the Stitch source assets. Do not replace the template with a generic design-system narrative unless the user explicitly asks for that.
+When a template is provided, keep the content concise, semantically descriptive, and grounded in the strongest available source material. Do not replace the template with a generic design-system narrative unless the user explicitly asks for that.
 
 ## Default `DESIGN.md` Output Shape
 
@@ -145,37 +167,27 @@ and surface color variation (surface, surface-container, surface-bright).
 - Don't use more than two font weights on a single screen
 ```
 
-If the user provides a project-specific template, follow that template exactly and keep the content concise, semantically descriptive, and grounded in the Stitch source assets.
+If the user provides a project-specific template, follow that template exactly and keep the content concise, semantically descriptive, and grounded in the strongest available source material.
 
 ## Usage Example
 
-To use this skill for the Furniture Collection project:
+To use this skill for a feature brief:
 
-1. **Retrieve project information:**
-   ```
-   Use the Stitch MCP Server to get the Furniture Collection project
-   ```
+1. **Read the source material:**
+   - Review the PRD, brief, or supporting notes
 
-2. **Get the Home page screen details:**
-   ```
-   Retrieve the Home page screen's code, image, and screen object information
-   ```
+2. **Optionally enrich with visuals:**
+   - If Stitch assets exist, use them to validate the tone, palette, and component language
 
-3. **Reference best practices:**
-   ```
-   Review the Stitch Effective Prompting Guide at:
-   https://stitch.withgoogle.com/docs/learn/prompting/
-   ```
-
-4. **Analyze and synthesize:**
-   - Extract all relevant design tokens from the screen
+3. **Analyze and synthesize:**
+   - Extract relevant design tokens, behavioral cues, and layout principles
    - Translate technical values into descriptive language
-   - Organize information according to the DESIGN.md structure
+   - Organize information according to the `DESIGN.md` structure
 
-5. **Generate the file:**
+4. **Generate the file:**
    - Create `DESIGN.md` in the project directory
    - Follow the prescribed format exactly
-   - Ensure all color codes are accurate
+   - Ensure all color codes are accurate when source values exist
    - Use evocative, designer-friendly language
 
 ## Best Practices
