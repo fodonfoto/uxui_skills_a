@@ -58,7 +58,7 @@ Assume the following product realities unless the official docs contradict them:
 
 ## Stitch MCP Execution Contract
 
-In this environment, use the available Stitch MCP tools to drive the required project workflow even when there is no dedicated single-purpose import tool.
+In this Codex environment, use the available Stitch MCP tools to drive the required project workflow even when there is no dedicated single-purpose import tool.
 
 Required rule:
 
@@ -107,6 +107,7 @@ Activate this skill when the user wants to:
 - Build or refine a multi-screen UI direction in Stitch
 - Use or establish a `DESIGN.md` file for consistency
 - Import or reuse design-system context from another source
+- Export one or more Stitch screens into a destination Figma canvas
 - Move from vague UI intent to a concrete Stitch generation workflow
 
 ## Do Not Use This Skill For
@@ -117,7 +118,7 @@ Activate this skill when the user wants to:
 
 ## Available Stitch Tools In This Environment
 
-Prefer the actual Stitch MCP tools exposed in this environment:
+Prefer the actual Stitch MCP tools exposed in this Codex environment:
 
 - `mcp__stitch__list_projects`
 - `mcp__stitch__create_project`
@@ -129,6 +130,8 @@ Prefer the actual Stitch MCP tools exposed in this environment:
 - `mcp__stitch__generate_variants`
 
 Do not instruct the agent to discover generic tool prefixes or call imaginary wrapper tools when the concrete tool names are already known.
+
+For Figma handoff or export requests, combine this skill with the Figma skill stack and the available `mcp__figma__*` tools. The Stitch portion of the workflow is responsible for identifying the target project/screens and retrieving their hosted artifacts. The Figma portion is responsible for importing or recreating those artifacts inside the destination Figma file.
 
 ## Core Workflow
 
@@ -280,6 +283,39 @@ After generation or editing:
 
 Local reference: the bundled Stitch API notes describe `htmlCode.downloadUrl`, `screenshot.downloadUrl`, and related metadata returned by `get_screen`.
 
+### 5.5 Export Selected Stitch Screens To Figma
+
+Treat requests such as "export to Figma", "send to Figma", "place this Stitch screen in Figma", "copy to Figma", or "export to Figma clipboard" as a Stitch-to-Figma handoff workflow.
+
+Runbook:
+
+1. Resolve the exact Stitch project and screen IDs.
+2. Call `mcp__stitch__get_screen`.
+3. Use `htmlCode.downloadUrl` as the primary source when present. Keep `screenshot.downloadUrl` as fallback.
+4. Choose destination mode:
+   - `clipboard`: use `mcp__figma__generate_figma_design(outputMode: clipboard)`
+   - `existingFile`: use `mcp__figma__generate_figma_design(outputMode: existingFile, fileKey: ...)`
+5. If the user wants `existingFile` and did not provide a Figma URL/file target, ask for it. Do not guess.
+6. Try HTML capture first.
+7. If the Stitch HTML URL is a forced download or cannot be captured directly, switch immediately to the local fallback:
+   - use `scripts/prepare_local_capture.sh`
+   - open the returned `LOCAL_URL` with the `#figmacapture=...&figmaendpoint=...` hash
+   - complete capture and poll when required
+   - stop the temporary server with `scripts/stop_local_capture.sh`
+8. If HTML capture fails, fall back to the hosted screenshot/image path and state that the result is visual-only.
+9. Preserve Stitch screen names as frame/page labels when practical.
+10. For `existingFile`, return a Figma screenshot for verification.
+11. For `clipboard`, report completion and only mirror into a file when visual QA is needed.
+
+Operational notes:
+
+- Fastest tested file-mode path: `mcp__stitch__get_screen` -> `htmlCode.downloadUrl` -> `mcp__figma__generate_figma_design(outputMode: existingFile)` -> capture -> poll -> `mcp__figma__get_screenshot`
+- Clipboard path: `mcp__stitch__get_screen` -> `htmlCode.downloadUrl` -> `mcp__figma__generate_figma_design(outputMode: clipboard)` -> capture
+- Prefer `scripts/prepare_local_capture.sh` over ad hoc localhost setup
+- Use `curl -L` only when a local HTML file is needed
+- If multiple screens are requested, export them in a bounded batch with deterministic naming
+- Do not claim success until Figma-side verification is complete for file exports
+
 ### 6. Close The Loop
 
 Do not stop at raw generation if the user clearly needs a usable output.
@@ -290,6 +326,7 @@ Possible next actions:
 - generate variants
 - extract or update `DESIGN.md`
 - hand off the generated screen to a code-oriented skill
+- export the selected screen to a destination Figma canvas and return a verification screenshot
 
 Prefer short iteration loops over trying to perfect the first prompt.
 
@@ -362,6 +399,46 @@ Before creating the UI screens:
 Then create the requested UI screens in this same project using the generated design system.
 ```
 
+For Stitch-to-Figma export requests, prefer a prompt/instruction block like:
+
+```markdown
+## Stitch Instructions
+
+Get the images and code for the following Stitch project's screens:
+
+## Project
+Title: [Project title]
+ID: [Project ID]
+
+## Screens:
+1. [Screen name]
+   ID: [Screen ID]
+
+Use a utility like `curl -L` to download the hosted URLs.
+
+Then export the selected screens into this destination Figma file/canvas:
+[Figma URL or file/node target]
+
+After import, capture a screenshot of the destination Figma canvas and return it for verification.
+```
+
+For fastest Stitch-to-Figma execution, prefer this operational sequence:
+
+```markdown
+1. Resolve the Stitch project and selected screen IDs.
+2. Call `mcp__stitch__get_screen`.
+3. If `htmlCode.downloadUrl` exists, use it as the primary export source.
+4. Call `mcp__figma__generate_figma_design` with the correct output mode to get a capture ID when needed.
+5. Try capture using the Stitch HTML source.
+6. If the HTML URL triggers a file download instead of opening as a page, immediately:
+   - `curl -L` the HTML locally
+   - inject `capture.js`
+   - serve it on localhost
+   - open the localhost page with the figma capture hash
+   - trigger capture and poll to completion
+7. For file exports, call `mcp__figma__get_screenshot` on the returned node/file target and send that screenshot back to the user.
+```
+
 ## Quality Rules
 
 - Treat official Stitch docs as the primary source of truth.
@@ -370,6 +447,10 @@ Then create the requested UI screens in this same project using the generated de
 - Do not invent Stitch tool names, schema fields, or workflows without support from docs or local references.
 - When an external design source is attached, default to generating the project's `DESIGN.md` first, then generating feature screens second.
 - Default to asking Stitch to create the design-system artifact inside the project, then send the full `DESIGN.md` back into Stitch, render it on canvas, and use it as the theme basis before any page-level UI generation.
+- When the user asks for export to Figma, require an explicit Figma destination and complete the Figma-side placement plus screenshot verification before considering the task done.
+- When the user asks for Figma clipboard specifically, prefer `outputMode: clipboard` and do not force an existing-file destination.
+- For export to Figma, prefer HTML capture into Figma over flat-image placement whenever `htmlCode.downloadUrl` exists.
+- If Stitch HTML capture cannot be opened directly because the URL forces a download, use the local serve fallback immediately instead of retrying the external-path capture.
 - Do not discard existing design language unless the user explicitly asks for a redesign.
 - Keep prompts specific enough to produce stable output, but avoid over-constraining early ideation.
 - When editing, preserve the unchanged parts of the current screen unless the prompt says otherwise.
@@ -400,6 +481,17 @@ If the user asks to import/apply a design system into the active Stitch project:
 3. Use that synthesized system in all subsequent generation/edit prompts.
 4. Inspect project/screen outputs after each major stage when possible.
 
+If the user asks to export selected Stitch screens to Figma:
+
+1. Resolve the selected Stitch screen IDs and retrieve their hosted artifacts with `mcp__stitch__get_screen`.
+2. If the requested mode is `clipboard`, use `mcp__figma__generate_figma_design(outputMode: clipboard)`.
+3. Otherwise, if no Figma destination link/reference was supplied, ask the user for the destination Figma URL before proceeding.
+4. If `htmlCode.downloadUrl` exists, attempt HTML capture first.
+5. If the HTML URL is a forced download or otherwise not directly capturable, use `scripts/prepare_local_capture.sh` and the local capture flow.
+6. If HTML capture still fails, fall back to the hosted screenshot/image export path.
+7. For existing-file mode, return a Figma screenshot after placement.
+8. For clipboard mode, report completion and only mirror into a file when visual verification is needed.
+
 ## Recommended Companions
 
 Use these adjacent skills when they materially improve the workflow:
@@ -408,8 +500,68 @@ Use these adjacent skills when they materially improve the workflow:
 - `enhance-prompt`: when the raw idea is too vague for stable Stitch output
 - `stitch-loop`: when the user wants repeated page-by-page autonomous website building, baton passing, sitemap-aware page sequencing, and static-site integration around Stitch output
 - `react:components`: when the user wants to turn Stitch output into React components
+- `figma` / `figma-generate-design` / `figma-use`: when the user wants Stitch outputs exported or recreated inside a Figma file
 
 ## Examples
+
+### Example 0: Export A Selected Stitch Screen To Figma
+
+User intent:
+
+```text
+Export the selected Stitch screen into my destination Figma file.
+```
+
+Expected skill behavior:
+
+1. Resolve the Stitch project and screen IDs.
+2. Use `mcp__stitch__get_screen` to fetch hosted screenshot/code URLs.
+3. If the destination Figma link is missing, ask the user for it directly.
+4. Prefer `htmlCode.downloadUrl` and capture it into the destination Figma file first.
+5. If the HTML URL forces a download, switch immediately to `curl -L` + local serve + capture hash flow.
+6. Fall back to screenshot placement only if HTML capture is unavailable.
+7. Capture a screenshot of the Figma result and return it to the user.
+
+### Example 0B: Export A Selected Stitch Screen To Figma Clipboard
+
+User intent:
+
+```text
+Copy this Stitch screen to the Figma clipboard so I can paste it into Figma.
+```
+
+Expected skill behavior:
+
+1. Resolve the Stitch project and screen IDs.
+2. Use `mcp__stitch__get_screen` to fetch hosted screenshot/code URLs.
+3. Prefer `htmlCode.downloadUrl`.
+4. Use `mcp__figma__generate_figma_design(outputMode: clipboard)` to get a capture ID.
+5. If the HTML URL forces a download, switch immediately to `curl -L` + local serve + capture hash flow.
+6. Complete the clipboard capture flow and report clipboard completion.
+7. If the user wants proof or QA, also run a bounded existing-file capture and return a screenshot.
+
+Recommended instruction template:
+
+```markdown
+## Stitch Instructions
+
+Get the images and code for the following Stitch project's screens:
+
+## Project
+Title: Wallet Top-up Flow
+ID: 7852934960964054339
+
+## Screens:
+1. Transaction Success
+   ID: 95d201981a054359a8d7742fc7182b50
+
+Use a utility like `curl -L` to download the hosted URLs.
+
+Then export the selected screens into this destination Figma file/canvas:
+[Figma URL or file/node target]
+
+After import, capture a screenshot of the destination Figma canvas and return it for verification.
+```
 
 ### Example 1: Create Project Design System First From An External Website
 
