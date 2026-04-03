@@ -1,6 +1,12 @@
 ---
 name: stitch-loop
 description: Teaches agents to iteratively build websites using Stitch with an autonomous baton-passing loop pattern
+allowed-tools:
+  - "stitch*:*"
+  - "chrome*:*"
+  - "Read"
+  - "Write"
+  - "Bash"
 ---
 
 # Stitch Build Loop
@@ -147,7 +153,7 @@ Modify `SITE.md`:
 
 **You MUST update `next-prompt.md` before completing.** This keeps the loop alive.
 
-1. **Decide the next page**:
+1. **Decide the next page**: 
    - Check `SITE.md` Section 5 (Roadmap) for pending items
    - If empty, pick from Section 6 (Creative Freedom)
    - Or invent something new that fits the site vision
